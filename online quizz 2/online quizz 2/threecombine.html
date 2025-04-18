@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>All-in-One Quiz App</title>
+  <style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-image: url("/dark2.jpg");
+  background-position: center;
+  background-size: cover;
+  /* background: linear-gradient(to right, #fdfbfb, #ebedee); */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  /* max-height: 500px; */
+  background: rgba(255, 255, 255, 0.749);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  /* display: grid;
+  grid-template-columns: 1fr 1fr; */
+
+}
+
+/* Section Visibility */
+.hidden {
+  display: none;
+}
+
+#categoriesSection,
+#quizSection,
+#resultSection {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Headings */
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #3f51b5;
+}
+
+/* Buttons */
+ #btn1 {
+  background: linear-gradient(to right, #2196f3, #1e88e5);
+  color: white;
+  border: none;
+  padding: 0.9rem 1.6rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+}
+
+button:hover {
+  background: linear-gradient(to right, #1976d2, #0d47a1);
+  transform: translateY(-2px);
+}
+
+/* Category Buttons */
+#categoriesSection button {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 1rem auto;
+}
+
+/* Timer & Progress */
+#timer {
+  text-align: center;
+  font-weight: bold;
+  color: #e53935;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.progress {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #00c853, #43a047);
+  transition: width 1s linear;
+}
+
+/* Quiz Content */
+#questionContainer {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.question-block h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.question-block label {
+  display: block;
+  margin-bottom: 0.75rem;
+  background: white;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.question-block label:hover {
+  background: #e3f2fd;
+  border-color: #64b5f6;
+}
+
+input[type="radio"] {
+  margin-right: 10px;
+}
+
+/* Result Styling */
+#finalScore {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+#emojiFeedback {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+#detailedResults {
+  margin-top: 2rem;
+}
+
+.result-question {
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  background: #fafafa;
+  border-left: 5px solid #ccc;
+}
+
+.correct {
+  border-left-color: #4caf50;
+  background: #e8f5e9;
+}
+
+.incorrect {
+  border-left-color: #f44336;
+  background: #ffebee;
+}
+
+/* Fade Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  button {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+}
+/* Smooth entrance animation */
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Question Container */
+#questionContainer {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  animation: slideInQuestion 0.5s ease-out forwards;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Animation for question container slide-in */
+@keyframes slideInQuestion {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Question text style */
+#questionContainer h3 {
+  font-size: 2rem;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* Style for the question options container */
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px;
+}
+
+/* Answer options with hover effect */
+.option {
+  background-color: #f4f6f8;
+  padding: 15px;
+  font-size: 1.1rem;
+  color: #333;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Hover effect for answer options */
+.option:hover {
+  background-color: #e3f2fd;
+  transform: translateY(-3px);
+}
+
+/* Selected answer styles */
+.selected {
+  background-color: #d1c4e9;
+  border-left: 6px solid #673ab7;
+}
+
+/* Correct answer styles */
+.correct {
+  background-color: #c8e6c9;
+  border-left: 6px solid #388e3c;
+}
+
+.correct:hover {
+  background-color: #a5d6a7;
+  transform: scale(1.05);
+}
+
+/* Incorrect answer styles */
+.incorrect {
+  background-color: #ffebee;
+  border-left: 6px solid #f44336;
+}
+
+.incorrect:hover {
+  background-color: #ef9a9a;
+  transform: scale(1.05);
+}
+
+/* Transition for smooth hovering on answers */
+.option:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Option selected state (incorrect, correct, or unselected) */
+.selected, .incorrect, .correct {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+/* Additional padding for container */
+.question-container-padding {
+  padding: 30px;
+}
+
+/* Result Section Container */
+#resultSection {
+  /* background: linear-gradient(145deg, #6a11cb, #2575fc); Stunning gradient for vibrant feel */
+  background-color: #333;
+  padding: 60px 40px;
+  border-radius: 20px;
+  max-width: 900px;
+  margin: 30px auto;
+  text-align: center;
+  color: white;
+  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
+  animation: fadeInEffect 1s ease-out forwards;
+}
+
+/* Fade-In Animation for Result Section */
+@keyframes fadeInEffect {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Main Heading */
+#resultSection h2 {
+  font-size: 2.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 20px;
+  animation: slideInUp 0.6s ease-out forwards;
+}
+
+/* Slide-in Up Animation for Heading */
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Final Score Styling */
+#finalScore {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 30px 0;
+  color: #f5f5f5;
+  background: #28a745;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.5s ease-in-out forwards;
+}
+
+/* Final Score Scale-In Animation */
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Emoji Feedback */
+#emojiFeedback {
+  font-size: 80px;
+  margin: 20px 0;
+  animation: bounceIn 1s ease-out forwards;
+}
+
+/* Bounce-in Animation for Emoji */
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Detailed Results Styling */
+#detailedResults {
+  /* background: rgba(255, 255, 255, 0.8); */
+  color: #333;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  animation: fadeInDetails 0.7s ease-out forwards;
+}
+
+/* Fade-In Animation for Detailed Results */
+@keyframes fadeInDetails {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button Styling */
+button {
+  background-color: #f8c42b;
+  color: white;
+  font-size: 1.2rem;
+  padding: 18px 35px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #e7b300;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Styling for Smaller Screens */
+@media (max-width: 768px) {
+  #resultSection {
+    padding: 40px 20px;
+    margin: 20px;
+  }
+
+  #finalScore {
+    font-size: 2.5rem;
+  }
+
+  #emojiFeedback {
+    font-size: 60px;
+  }
+
+  #detailedResults {
+    padding: 20px;
+  }
+
+  button {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+}
+/* Detailed Results Section */
+#detailedResults {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 30px;
+  padding: 40px;
+  /* background: linear-gradient(135deg, #f0f8ff, #e6f7ff); */
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 1.5s ease-out forwards;
+  max-width: 90%;
+  margin: 40px auto;
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+/* New Fade-In Up Animation */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Individual Result Item */
+.resultItem {
+  /* background: #ffffff; */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInItem 1.5s ease-out forwards;
+}
+
+/* Fade-In Animation for Each Item */
+@keyframes fadeInItem {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover Effect for Individual Items (Hover-Up) */
+.resultItem:hover {
+  transform: translateY(-10px); /* Moves the item up when hovered */
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Question Title */
+.resultItem h3 {
+  font-size: 1.6rem;
+  color: black; /* Dark Blue for Titles */
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  animation: fadeInText 2s ease-out forwards;
+}
+
+/* Fade-In Text Animation */
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Answer Text */
+.resultItem p {
+  font-size: 1.3rem;
+  color: #34495e; /* Softer Dark Gray */
+  margin: 10px 0;
+  line-height: 1.6;
+  animation: fadeInText 1.8s ease-out forwards;
+}
+
+/* Correct Answer Styling */
+.correct {
+  background-color: #96dc67b9; /* Light Green */
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  animation: fadeInText 2.5s ease-out forwards;
+  transform: scale(1.05);
+}
+
+/* Hover Effect on Correct Answer */
+.correct:hover {
+  background-color: #7cb342; /* Darker Green */
+  transform: scale(1.1); /* Hover effect to scale up */
+}
+
+/* Incorrect Answer Styling */
+.incorrect {
+  background-color: #f4cccc75; /* Light Red */
+  color:#333;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  animation: fadeInText 2.5s ease-out forwards;
+  transform: scale(1.05);
+}
+
+/* Hover Effect on Incorrect Answer */
+.incorrect:hover {
+  background-color: #f66c6c; /* Slightly darker red */
+  transform: scale(1.1); /* Hover effect to scale up */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #detailedResults {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .resultItem {
+    margin-bottom: 20px;
+  }
+
+  .resultItem h3 {
+    font-size: 1.4rem;
+  }
+
+  .resultItem p {
+    font-size: 1.1rem;
+  }
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- CATEGORIES -->
+    <div id="categoriesSection">
+      <h2>Select a Category</h2>
+      <button onclick="startQuiz('General Knowledge')" id="btn1">General Knowledge</button>
+      <button onclick="startQuiz('History')" id="btn1">History</button>
+      <button onclick="startQuiz('Logical Reasoning')"id="btn1">Logical Reasoning</button>
+      <button onclick="startQuiz('History')" id="btn1">programming</button>
+      <button onclick="startQuiz('Logical Reasoning')" id="btn1">english grammer</button>
+      <button onclick="startQuiz('History')"id="btn1">aptitude</button>
+     <button class="exit" style="background-color: #333; color: white;">exit</button>
+
+    </div>
+   
+    <!-- QUIZ -->
+    <div id="quizSection" class="hidden">
+      <h2 id="quizTitle">Quiz</h2>
+      <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+      <div id="timer">10:00</div>
+      <div id="questionContainer"></div>
+      <div>
+        <button onclick="prevQuestion() " id="btn1">Previous</button>
+        <button onclick="nextQuestion()" id="btn1">Next</button>
+        <button onclick="submitQuiz()" id="btn1">Submit</button>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="resultSection" class="hidden">
+      <h2>Quiz Result - <span id="resultCategory"></span></h2>
+      <p>Your Score: <span id="finalScore"></span>/100</p>
+      <p id="emojiFeedback" style="font-size: 32px;"></p>
+      <div id="detailedResults"></div>
+      <button onclick="retake()" id="btn1">Retake</button>
+      <button onclick="goToCategories()" id="btn1">Back to Categories</button>
+    </div>
+
+  </div>
+
+  <script>
+    const allQuestions = {
+      "General Knowledge": [
+        { question: "What is the capital of France?", options: ["Berlin", "London", "Paris", "Rome"], answer: "Paris" },
+        { question: "Which is the largest ocean?", options: ["Atlantic", "Indian", "Pacific", "Arctic"], answer: "Pacific" },
+        { question: "Which planet is known as Red Planet?", options: ["Earth", "Mars", "Venus", "Jupiter"], answer: "Mars" },
+        { question: "Which organ purifies our blood?", options: ["Heart", "Lungs", "Kidney", "Liver"], answer: "Kidney" },
+        { question: "What gas do plants absorb?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Helium"], answer: "Carbon Dioxide" },
+        { question: "What is the boiling point of water?", options: ["100°C", "90°C", "80°C", "120°C"], answer: "100°C" },
+        { question: "Which country gifted Statue of Liberty?", options: ["Germany", "France", "Canada", "Italy"], answer: "France" },
+        { question: "How many continents are there?", options: ["5", "6", "7", "8"], answer: "7" },
+        { question: "Which festival is known as festival of lights?", options: ["Eid", "Diwali", "Holi", "Christmas"], answer: "Diwali" },
+        { question: "Who wrote Ramayana?", options: ["Valmiki", "Tulsidas", "Kalidas", "Kabir"], answer: "Valmiki" }
+      ],
+      "History": [
+        { question: "Who was the first President of the USA?", options: ["Abraham Lincoln", "John Adams", "George Washington", "Thomas Jefferson"], answer: "George Washington" },
+        { question: "In which year did WW2 end?", options: ["1945", "1939", "1950", "1940"], answer: "1945" },
+        { question: "Who discovered America?", options: ["Columbus", "Magellan", "Cook", "Da Gama"], answer: "Columbus" },
+        { question: "Who was the last Mughal emperor?", options: ["Akbar", "Babur", "Bahadur Shah Zafar", "Shah Jahan"], answer: "Bahadur Shah Zafar" },
+        { question: "What was the capital of Mauryan Empire?", options: ["Patliputra", "Delhi", "Lahore", "Agra"], answer: "Patliputra" },
+        { question: "Which war ended with Treaty of Versailles?", options: ["WW1", "WW2", "Cold War", "Civil War"], answer: "WW1" },
+        { question: "Who built the Red Fort?", options: ["Akbar", "Shah Jahan", "Aurangzeb", "Humayun"], answer: "Shah Jahan" },
+        { question: "Which empire ruled India before British?", options: ["Mughal", "Maurya", "Gupta", "Chola"], answer: "Mughal" },
+        { question: "Where was Gandhi born?", options: ["Porbandar", "Rajkot", "Mumbai", "Ahmedabad"], answer: "Porbandar" },
+        { question: "Who discovered the sea route to India?", options: ["Columbus", "Vasco da Gama", "Magellan", "Drake"], answer: "Vasco da Gama" }
+      ],
+      "Logical Reasoning": [
+        { question: "Which number comes next: 2, 4, 8, 16, ?", options: ["18", "20", "32", "30"], answer: "32" },
+        { question: "Find the odd one: Apple, Mango, Carrot, Banana", options: ["Apple", "Mango", "Carrot", "Banana"], answer: "Carrot" },
+        { question: "What comes after Monday?", options: ["Sunday", "Tuesday", "Friday", "Wednesday"], answer: "Tuesday" },
+        { question: "If 2+2=4, what is 4+4?", options: ["6", "8", "10", "12"], answer: "8" },
+        { question: "Which shape has 4 equal sides?", options: ["Circle", "Triangle", "Square", "Rectangle"], answer: "Square" },
+        { question: "Which is heavier: 1kg cotton or 1kg iron?", options: ["Cotton", "Iron", "Same", "None"], answer: "Same" },
+        { question: "What comes before 100?", options: ["99", "98", "101", "95"], answer: "99" },
+        { question: "Opposite of Hot?", options: ["Cool", "Cold", "Warm", "Ice"], answer: "Cold" },
+        { question: "Color of banana?", options: ["Red", "Yellow", "Green", "Blue"], answer: "Yellow" },
+        { question: "3 x 3 = ?", options: ["6", "9", "12", "8"], answer: "9" }
+      ],
+      // "programming":[
+      //  {question:"1. What does HTML stand for?",option:["Hyperlinks and Text Markup Language","Home Tool Markup Language","Hyper Text Markup Language","Hyper Tool Multi Language"],answer:"Hyper Text Markup Language"},
+      //  { question: "2. Which of the following is not a programming language?", options: ["Python", "java", "HTML", "MSword"], answer: "MSword" },
+      //  {question:" 3.Which symbol is used for single-line comments in Python?",option:["//","$$","#","||"],answer:"#"}, 
+      // {question:"4.What does CSS stand for?",option:[" Colorful Style Sheets","Cascading Style Sheets","Creative Style Syntax","Computer Style System"],answer:"Cascading Style Sheets"},
+      // {question:" 5.What is the output of 3=='3' in jS",option:["true","false","error","undefined"],answer:"true"}, 
+      // { question: "6.Which of the following is used to declare a variable in JavaScript?", options: ["def", "var", "let", "var and let"], answer: "var and let" },
+      // {question:"7.What is the purpose of a loop in programming?",option:["code look clean","task repeat","store","define function"],answer:"task repeat"}, 
+      // {question:"8.Which language is primarily used for Android app development?",option:["swift","kotlin","ruby","PHP"],answer:"kotlin"}, 
+      // {question:"9.In programming, what is a function?",option:["repeat task","store","divide a program","nothing"],answer:"divide a program"},
+      // {question:"10.What does the === operator do in JavaScript?",option:["compare two value","assign","rotate","remove"],answer:"compare two value"}, 
+      // ]
+    
+    };
+
+    let selectedCategory = '';
+    let currentQuestions = [];
+    let currentAnswers = [];
+    let currentIndex = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 600;
+
+    function startQuiz(category) {
+      selectedCategory = category;
+      currentQuestions = allQuestions[category];
+      currentAnswers = new Array(10);
+      currentIndex = 0;
+      score = 0;
+      timeLeft = 600;
+      document.getElementById('categoriesSection').classList.add('hidden');
+      document.getElementById('quizSection').classList.remove('hidden');
+      document.getElementById('quizTitle').textContent = `Category: ${category}`;
+      showQuestion();
+      startTimer();
+    }
+
+    function showQuestion() {
+      const q = currentQuestions[currentIndex];
+      const container = document.getElementById("questionContainer");
+      container.innerHTML = `
+        <div class="question">${currentIndex + 1}. ${q.question}</div>
+        ${q.options.map(option => `
+          <div class="option">
+            <label><input type="radio" name="option" value="${option}" ${currentAnswers[currentIndex] === option ? 'checked' : ''}/> ${option}</label>
+          </div>`).join('')}
+      `;
+    }
+
+    function nextQuestion() {
+      saveAnswer();
+      if (currentIndex < currentQuestions.length - 1) {
+        currentIndex++;
+        showQuestion();
+      }
+    }
+
+    function prevQuestion() {
+      saveAnswer();
+      if (currentIndex > 0) {
+        currentIndex--;
+        showQuestion();
+      }
+    }
+
+    function saveAnswer() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (selected) {
+        currentAnswers[currentIndex] = selected.value;
+      }
+    }
+
+    function submitQuiz() {
+      clearInterval(timer);
+      calculateScore();
+      showResult();
+    }
+
+    function calculateScore() {
+      score = 0;
+      currentQuestions.forEach((q, i) => {
+        if (currentAnswers[i] === q.answer) score += 10;
+      });
+    }
+var exit=document.querySelector(".exit");
+// console.log(exit);
+exit.addEventListener("click",function () {
+  window.location.href="index.html"
+})
+
+    function showResult() {
+      document.getElementById('quizSection').classList.add('hidden');
+      document.getElementById('resultSection').classList.remove('hidden');
+      document.getElementById('resultCategory').textContent = selectedCategory;
+      document.getElementById('finalScore').textContent = score;
+
+      const emoji = score >= 80 ? "🌟 Excellent" :
+                    score >= 60 ? "👍 Good" :
+                    score >= 40 ? "😐 Average" :
+                                  "📘 Needs Practice";
+      document.getElementById('emojiFeedback').textContent = emoji;
+
+      const details = document.getElementById('detailedResults');
+      details.innerHTML = "";
+      currentQuestions.forEach((q, i) => {
+        const isCorrect = currentAnswers[i] === q.answer;
+        const div = document.createElement("div");
+        div.className = `question-block ${isCorrect ? 'correct' : 'incorrect'}`;
+        div.innerHTML = `
+          <p><strong>${i + 1}. ${q.question}</strong></p>
+          <p>Your Answer: ${currentAnswers[i] || "Not Answered"}</p>
+          <p>Correct Answer: ${q.answer}</p>
+        `;
+        details.appendChild(div);
+      });
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        timeLeft--;
+        const min = Math.floor(timeLeft / 60);
+        const sec = timeLeft % 60;
+        document.getElementById('timer').textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        document.getElementById('progressBar').style.width = `${(600 - timeLeft) / 6}%`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          submitQuiz();
+        }
+      }, 1000);
+    }
+
+    function retake() {
+      document.getElementById('resultSection').classList.add('hidden');
+      startQuiz(selectedCategory);
+    }
+
+    function goToCategories() {
+      document.getElementById('resultSection').classList.add('hidden');
+      document.getElementById('categoriesSection').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

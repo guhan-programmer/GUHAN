@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <style>
+    * {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  background-image: url("/dark2.jpg");
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.box {
+  background: rgba(255, 255, 255, 0.666);
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 100%;
+  max-width: 350px;
+  animation: bounceIn 0.8s ease;
+}
+
+.box h2 {
+  margin-bottom: 25px;
+  color: #333;
+}
+
+form input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background: #f1f1f1;
+  transition: 0.3s;
+  font-size: 15px;
+}
+
+form input:focus {
+  outline: none;
+  background: #e0e0e0;
+  box-shadow: 0 0 0 3px #a78bfa;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #5a67d8;
+  transform: scale(1.03);
+}
+
+.error {
+  color: #e53e3e;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.signup {
+  margin-top: 15px;
+  color:black;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+  animation: fadeUp 1s ease-in-out 1.2s both;
+}
+
+.signup:hover {
+  color: rgb(174, 19, 212);
+}
+
+/* Animations */
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" id="loginUser" placeholder="Username" required />
+      <input type="password" id="loginPass" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <div id="errorMessage" class="error"></div>
+    <div class="signup">create an account!</div>
+  </div>
+   
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const enteredUser = document.getElementById('loginUser').value;
+      const enteredPass = document.getElementById('loginPass').value;
+
+      const storedUser = localStorage.getItem("user");
+      const storedPass = localStorage.getItem("pass");
+
+      if (enteredUser === storedUser && enteredPass === storedPass) {
+        // If the username and password match, redirect to categories page
+        alert("Login successful!");
+        location.href = "threecombine.html";
+      } else {
+        // If login fails, show an error message
+        document.getElementById('errorMessage').textContent = "Invalid username or password. Please try again.";
+      }
+    });
+    var sign=document.querySelector(".signup")
+    // console.log(sign);
+    sign.addEventListener("click",function(){
+      window.location.href="signup.html"
+    })
+    
+  </script>
+</body>
+</html>

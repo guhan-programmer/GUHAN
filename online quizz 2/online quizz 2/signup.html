@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      height: 100vh;
+      background-image: url("/dark2.jpg");
+      background-attachment: fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .container h2 {
+      margin-bottom: 30px;
+      color: #333;
+      font-size: 24px;
+    }
+
+    form input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 12px 0;
+      border: none;
+      border-radius: 8px;
+      background: #f1f1f1b2;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #333;
+      transform: scale(1.03);
+    }
+
+    .error {
+      color: #e53e3e;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+      <input type="text" id="loginUser" placeholder="Username" required />
+      <input type="password" id="loginPass" placeholder="Password" required />
+      <input type="email" id="mail" placeholder="Email" required />
+      <input type="text" id="phnumber" placeholder="Phone Number" required />
+      <button type="submit">Create Account</button>
+    </form>
+    <div id="errorMessage" class="error"></div>
+  </div>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('loginUser').value.trim();
+      const password = document.getElementById('loginPass').value.trim();
+      const email = document.getElementById('mail').value.trim();
+      const phone = document.getElementById('phnumber').value.trim();
+
+      if (!username || !password || !email || !phone) {
+        document.getElementById('errorMessage').textContent = "Please fill in all fields.";
+        return;
+      }
+
+      // Save to localStorage
+      localStorage.setItem("user", username);
+      localStorage.setItem("pass", password);
+      localStorage.setItem("email", email);
+      localStorage.setItem("phone", phone);
+
+      alert("Account created successfully!");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
